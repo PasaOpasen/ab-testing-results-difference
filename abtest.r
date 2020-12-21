@@ -23,12 +23,29 @@ pair_test = function(vec1, vec2, both_normal = FALSE){
 
 
 ab_test = function(df){
+  
+  # matrix of compares
+  eq_mat = matrix(0, nrow = ncol(df), ncol = ncol(df))
+  
+  dsp = sapply(df, sd)
+  if(sum(dsp == 0) > 0){
+    
+    cat('\n Element with zero dispersion! \n')
+    cat('Means:\n')
+    print(sapply(df, mean))
+    cat('Standard dev.:\n')
+    print(dsp)
+    
+    return(list(mat = eq_mat))
+  }
+  
   # convert to long format
   df2 = pivot_longer(df, cols = names(df)) %>% mutate(name = factor(name))
   
   g = ggplot(df2, aes(y = value, x = name)) + geom_boxplot() + 
     labs(x = 'Group', title = 'Boxplots by groups') + theme_bw()
   print(g)
+  
   
   # check normal distribution
   normals_vec = sapply(df, function(x) nortest::ad.test(x)$p.value > 0.05)
@@ -38,12 +55,9 @@ ab_test = function(df){
     
   } else{
     cat('\n No difference \n')
-    return()
+    return(list(mat = eq_mat))
   }
   
-  
-  # matrix of compares
-  eq_mat = matrix(0, nrow = ncol(df), ncol = ncol(df))
   
   for(i in 1:(ncol(df)-1)){
     for(j in (i+1):ncol(df)){
@@ -73,8 +87,15 @@ ab_test = function(df){
   # the rule for finding most less case
   counts = rowSums(eq_mat<1)
   min_res = (1:ncol(df))[counts == max(counts)]
+  max_res = (1:ncol(df))[counts == min(counts)]
   
+  cat('\n Minimal cats:')
   print(colnames(df)[min_res])
+  
+  cat('\n Maximal cats:')
+  print(colnames(df)[max_res])
+  
+  return(list(mat = eq_mat))
 }
 
 
