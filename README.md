@@ -42,3 +42,14 @@ a3  1   1   0
 ```
 
 Where `[a1, a2] == 1` means that `mean(a1)` is importantly more than `mean(a2)` but `[a1, a3] == -1` means that `mean(a1)` is importantly less than `mean(a3)`
+
+## Visualizations
+
+During the working it also creates boxplot for comparing results. Next result examples are got from testing several hyperparameters' values of [genetic algorithm](https://github.com/PasaOpasen/geneticalgorithm2) realization for ration searching at [Nutrient planner](https://nplanner.ru)
+
+![](images/cross1.png)
+![](images/cross2.png)
+![](images/cross3.png)
+![](images/cross4.png)
+![](images/cross5.png)
+![](images/cross6.png)
